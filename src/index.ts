@@ -1,4 +1,7 @@
-import { Application, Graphics } from "pixi.js";
+import { Application, Loader } from "pixi.js";
+
+//https://cdn.pixabay.com/photo/2014/05/26/13/32/butterfly-354528__480.jpg
+//https://cdn.pixabay.com/photo/2015/07/19/09/47/still-life-851297__340.jpg
 
 const app = new Application({
   width: innerWidth,
@@ -7,17 +10,32 @@ const app = new Application({
 
 document.body.appendChild(app.view);
 
-const graphics = new Graphics();
-graphics.beginFill(0xffffff); // 1st step
-graphics.drawRect(20, 50, 100, 80); //2nd step
-graphics.endFill(); // 3rd step
+const loader = Loader.shared;
 
-// Another Graphic
+// Load assets
+loader
+  .add(
+    "img1",
+    "https://cdn.pixabay.com/photo/2014/05/26/13/32/butterfly-354528__480.jpg"
+  )
+  .add(
+    "img2",
+    "https://cdn.pixabay.com/photo/2015/07/19/09/47/still-life-851297__340.jpg"
+  )
+  .load((l, r) => {
+    const img1 = l.resources.img1;
+    const img2 = l.resources.img2;
+    console.log(img1, img2);
+  });
 
-const graphic2 = new Graphics();
-graphic2.beginFill(0xff00000);
-graphic2.drawCircle(50, 100, 30);
-graphic2.endFill();
+loader.onProgress.add((l, r) => {
+  console.log(loader.progress);
+});
 
-app.stage.addChild(graphics);
-app.stage.addChild(graphic2);
+loader.onLoad.add((e) => {
+  console.log(e);
+});
+
+loader.onComplete.add((e) => {
+  console.log("Loading of the assetes is compleyed");
+});
