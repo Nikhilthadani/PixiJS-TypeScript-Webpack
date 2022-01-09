@@ -1,7 +1,4 @@
-import { Application, Loader } from "pixi.js";
-
-//https://cdn.pixabay.com/photo/2014/05/26/13/32/butterfly-354528__480.jpg
-//https://cdn.pixabay.com/photo/2015/07/19/09/47/still-life-851297__340.jpg
+import { Application, Loader, Sprite, Texture } from "pixi.js";
 
 const app = new Application({
   width: innerWidth,
@@ -14,28 +11,29 @@ const loader = Loader.shared;
 
 // Load assets
 loader
-  .add(
-    "img1",
-    "https://cdn.pixabay.com/photo/2014/05/26/13/32/butterfly-354528__480.jpg"
-  )
-  .add(
-    "img2",
-    "https://cdn.pixabay.com/photo/2015/07/19/09/47/still-life-851297__340.jpg"
-  )
-  .load((l, r) => {
-    const img1 = l.resources.img1;
-    const img2 = l.resources.img2;
-    console.log(img1, img2);
+  .add("img1", "./assets/1.png")
+  .add("img2", "./assets/2.png")
+  .load((l) => {
+    // Convert to texture
+    const texture = Texture.from("img1");
+    const texture2 = Texture.from("img2");
+    console.log(texture, texture2);
+
+    // Convert to Sprites
+
+    const sprite = new Sprite(texture);
+    console.log(sprite);
+
+    sprite.position.set(100, 100);
+    sprite.width = 100;
+    sprite.height = 100;
+
+    app.stage.addChild(sprite);
+
+    const sprite2 = new Sprite(texture2);
+    sprite2.position.set(200, 200);
+    sprite2.width = 100;
+    sprite2.height = 100;
+
+    app.stage.addChild(sprite2);
   });
-
-loader.onProgress.add((l, r) => {
-  console.log(loader.progress);
-});
-
-loader.onLoad.add((e) => {
-  console.log(e);
-});
-
-loader.onComplete.add((e) => {
-  console.log("Loading of the assetes is compleyed");
-});
